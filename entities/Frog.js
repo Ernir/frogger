@@ -28,8 +28,8 @@ Frog.prototype.yRotationStep = 0.04;
 Frog.prototype.vertices = [];
 Frog.prototype.normals = [];
 
-Frog.prototype.ambient = vec4( 0.0, 0.5, 0.0, 1.0 );
-Frog.prototype.diffuse = vec4( 0.0, 0.5, 0.0, 1.0 );
+Frog.prototype.ambient = vec4( 0.0, 0.2, 0.0, 1.0 );
+Frog.prototype.diffuse = vec4( 0.0, 0.8, 0.0, 1.0 );
 Frog.prototype.specular = vec4( 0.2, 0.2, 0.2, 1.0 );
 Frog.prototype.shininess = 50.0;
 
@@ -70,10 +70,10 @@ Frog.prototype.render = function (baseMatrix) {
     var diffuseProduct = mult(g_light.diffuse, this.diffuse);
     var specularProduct = mult(g_light.specular, this.specular);
 
-    gl.uniform4fv( gl.getUniformLocation(g_program, "ambientProduct"), flatten(ambientProduct) );
-    gl.uniform4fv( gl.getUniformLocation(g_program, "diffuseProduct"), flatten(diffuseProduct) );
-    gl.uniform4fv( gl.getUniformLocation(g_program, "specularProduct"), flatten(specularProduct) );
-    gl.uniform1f( gl.getUniformLocation(g_program, "shininess"), this.shininess );
+    gl.uniform4fv( g_locs.ambientProduct, flatten(ambientProduct) );
+    gl.uniform4fv( g_locs.diffuseProduct, flatten(diffuseProduct) );
+    gl.uniform4fv( g_locs.specularProduct, flatten(specularProduct) );
+    gl.uniform1f( g_locs.shininess, this.shininess );
 
     gl.uniformMatrix4fv(g_locs.modelViewMatrix, false, flatten(modelViewMatrix) );
     gl.uniformMatrix3fv(g_locs.normalMatrix, false, flatten(normalMatrix) );

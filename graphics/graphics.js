@@ -83,6 +83,10 @@ function initBuffers() {
     g_locs.modelViewMatrix = gl.getUniformLocation( g_program, "modelViewMatrix" );
     g_locs.projectionMatrix = gl.getUniformLocation( g_program, "projectionMatrix" );
     g_locs.normalMatrix = gl.getUniformLocation( g_program, "normalMatrix" );
+    g_locs.ambientProduct = gl.getUniformLocation(g_program, "ambientProduct");
+    g_locs.diffuseProduct = gl.getUniformLocation(g_program, "diffuseProduct");
+    g_locs.specularProduct = gl.getUniformLocation(g_program, "specularProduct");
+    g_locs.shininess =  gl.getUniformLocation(g_program, "shininess");
 
     var fovy = 60.0;
     var near = 0.2;
@@ -100,7 +104,7 @@ function initBuffers() {
 function reloadView() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    var baseMatrix = lookAt(vec3(0.0, 1.0, g_camera.zView), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
+    var baseMatrix = lookAt(vec3(0.0, 5.0, g_camera.zView), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
     baseMatrix = mult(baseMatrix, rotateX(g_camera.spinX));
     baseMatrix = mult(baseMatrix, rotateY(g_camera.spinY));
     return baseMatrix;
