@@ -63,6 +63,11 @@ Frog.prototype.move = function (du) {
 
 Frog.prototype.render = function (baseMatrix) {
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.frogVertex);
+    gl.vertexAttribPointer(g_locs.vPosition, 4, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.frogNormal);
+    gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
+
     var modelViewMatrix = baseMatrix;
     var normalMatrix = util.normalsFromMV(modelViewMatrix);
 

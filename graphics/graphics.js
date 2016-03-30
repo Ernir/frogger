@@ -23,8 +23,6 @@ var g_camera = {
     origY: 0
 };
 
-var modelViewMatrix, projectionMatrix;
-
 var gl;
 var g_program;
 
@@ -36,8 +34,6 @@ function configureWebGL() {
     gl.clearColor(0.9, 1.0, 1.0, 1.0);
 
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
 
     g_program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(g_program);
@@ -45,57 +41,77 @@ function configureWebGL() {
 }
 
 var g_light = {
-    position: vec4(1.0, 1.0, 1.0, 0.0 ),
-    ambient: vec4(1.0, 1.0, 1.0, 1.0 ),
-    diffuse: vec4( 1.0, 1.0, 1.0, 1.0 ),
-    specular: vec4( 1.0, 1.0, 1.0, 1.0 )
+    position: vec4(1.0, 1.0, 1.0, 0.0),
+    ambient: vec4(1.0, 1.0, 1.0, 1.0),
+    diffuse: vec4(1.0, 1.0, 1.0, 1.0),
+    specular: vec4(1.0, 1.0, 1.0, 1.0)
 };
 
 function initBuffers() {
 
     var PR = PlyReader();
-    var plyData = PR.read("froggy.ply");
+    var frogData = PR.read("froggy.ply");
 
-    Frog.prototype.vertices = plyData.points;
-    Frog.prototype.normals = plyData.normals;
+    Frog.prototype.vertices = frogData.points;
+    Frog.prototype.normals = frogData.normals;
 
-    gl.useProgram( g_program );
+    Square.prototype.vertices = [
+        vec4(-0.5, 0, 0.5, 1),
+        vec4(-0.5, 0,-0.5, 1),
+        vec4( 0.5, 0, 0.5, 1),
+        vec4( 0.5, 0,-0.5, 1)
+    ];
+    Square.prototype.normals = [
+        vec4( 0, 1, 0, 0),
+        vec4( 0, 1, 0, 0),
+        vec4( 0, 1, 0, 0),
+        vec4( 0, 1, 0, 0)
+    ];
+
+    gl.useProgram(g_program);
 
     // Normals array attribute buffer
-    var frogNormalBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, frogNormalBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(Frog.prototype.normals), gl.STATIC_DRAW );
+    g_buffers.frogNormal = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.frogNormal);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(Frog.prototype.normals), gl.STATIC_DRAW);
 
-    var vNormal = gl.getAttribLocation( g_program, "vNormal" );
-    gl.vertexAttribPointer( vNormal, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vNormal );
+    g_buffers.squareNormal = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.squareNormal);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(Square.prototype.normals), gl.STATIC_DRAW);
 
+    g_locs.vNormal = gl.getAttribLocation(g_program, "vNormal");
+    gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(g_locs.vNormal);
 
     // vertex array attribute buffer
-    var vBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(Frog.prototype.vertices), gl.STATIC_DRAW );
+    g_buffers.frogVertex = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.frogVertex);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(Frog.prototype.vertices), gl.STATIC_DRAW);
 
-    var vPosition = gl.getAttribLocation( g_program, "vPosition" );
-    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vPosition );
+    g_buffers.squareVertex = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.squareVertex);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(Square.prototype.vertices), gl.STATIC_DRAW);
 
-    g_locs.modelViewMatrix = gl.getUniformLocation( g_program, "modelViewMatrix" );
-    g_locs.projectionMatrix = gl.getUniformLocation( g_program, "projectionMatrix" );
-    g_locs.normalMatrix = gl.getUniformLocation( g_program, "normalMatrix" );
+    g_locs.vPosition = gl.getAttribLocation(g_program, "vPosition");
+    gl.vertexAttribPointer(g_locs.vPosition, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(g_locs.vPosition);
+
+    g_locs.modelViewMatrix = gl.getUniformLocation(g_program, "modelViewMatrix");
+    g_locs.projectionMatrix = gl.getUniformLocation(g_program, "projectionMatrix");
+    g_locs.normalMatrix = gl.getUniformLocation(g_program, "normalMatrix");
     g_locs.ambientProduct = gl.getUniformLocation(g_program, "ambientProduct");
     g_locs.diffuseProduct = gl.getUniformLocation(g_program, "diffuseProduct");
     g_locs.specularProduct = gl.getUniformLocation(g_program, "specularProduct");
-    g_locs.shininess =  gl.getUniformLocation(g_program, "shininess");
+    g_locs.shininess = gl.getUniformLocation(g_program, "shininess");
 
     var fovy = 60.0;
     var near = 0.2;
     var far = 100.0;
-    projectionMatrix = perspective( fovy, 1.0, near, far );
-    gl.uniformMatrix4fv(g_locs.projectionMatrix, false, flatten(projectionMatrix) );
+    var projectionMatrix = perspective(fovy, 1.0, near, far);
+    gl.uniformMatrix4fv(g_locs.projectionMatrix, false, flatten(projectionMatrix));
 
 
-    gl.uniform4fv( gl.getUniformLocation(g_program, "lightPosition"), flatten(g_light.position) );
+    gl.uniform4fv(gl.getUniformLocation(g_program, "lightPosition"), flatten(g_light.position));
 
 
 }

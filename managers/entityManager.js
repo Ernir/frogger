@@ -14,11 +14,13 @@ var entityManager = {
 // "PRIVATE" DATA
 
     _frogList: [],
+    _squareList: [],
 
 // "PRIVATE" METHODS
 
     _generateThings: function () {
         this.createFrog();
+        this.createSquare();
     },
 
     _forEachOf: function (aCategory, fn) {
@@ -39,7 +41,8 @@ var entityManager = {
 
     deferredSetup: function () {
         this._categories = [
-            this._frogList
+            this._frogList,
+            this._squareList
         ];
     },
 
@@ -49,6 +52,10 @@ var entityManager = {
 
     createFrog: function (descr) {
         this._frogList.push(new Frog(descr));
+    },
+
+    createSquare: function (descr) {
+        this._squareList.push(new Square(descr));
     },
 
     update: function (du) {
