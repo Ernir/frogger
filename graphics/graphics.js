@@ -11,6 +11,8 @@ var g_colors = {
     orangeLight: vec4(1.0, 0.7, 0.3, 1.0),
     orange: vec4(1.0, 0.2, 0.0, 1.0),
     magenta: vec4(1.0, 0.0, 1.0, 1.0),
+    gray: vec4(0.4, 0.4, 0.4, 0.0),
+    grayDark: vec4(0.2, 0.2, 0.2, 0.0),
     cyan: vec4(0.0, 1.0, 1.0, 1.0)
 };
 

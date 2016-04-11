@@ -20,15 +20,34 @@ var entityManager = {
 
     _generateThings: function () {
         this.createFrog({cx: 6});
+        // Create rows
 
-        for (var i = 0; i < g_grid.width; i++) {
-            this.createSquare({
-                cx: i,
-                cz: 0,
-                ambient: vec4(0.2, 0.2, 0.2, 0.2),
-                diffuse: vec4(0.4, 0.4, 0,2, 0.2)
-            })
+        this.createRow(0, g_colors.gray);
+        for (var i = 1; i < 6; i++) {
+            this.createRow(i, g_colors.grayDark);
         }
+        this.createRow(6, g_colors.gray);
+        for (var j = 7; i < 11; i++) {
+            this.createRow(i, g_colors.blue, true);
+        }
+        for (var k = 0; k < 13; k++) {
+            if (k % 2 === 0) {
+                this.createSquare({
+                    cx: k,
+                    cz: 11,
+                    color: g_colors.green,
+                    impassable: true
+                });
+            } else {
+                this.createSquare({
+                    cx: k,
+                    cz: 11,
+                    color: g_colors.blue,
+                    goal: true
+                });
+            }
+        }
+        this.createRow(12, g_colors.green)
     },
 
     _forEachOf: function (aCategory, fn) {
@@ -62,11 +81,30 @@ var entityManager = {
         this._frogList.push(new Frog(descr));
     },
 
+    createRow: function (rowNumber, color, deadly) {
+        var gridWidth = 13;
+        if (!deadly) {
+            deadly = false;
+        }
+        for (var i = 0; i < gridWidth; i++) {
+            this.createSquare({
+                cx: i,
+                cz: rowNumber,
+                color: color,
+                deadly: deadly
+            })
+        }
+    },
+
     createSquare: function (descr) {
+        if (descr.color) {
+            descr.ambient = descr.color;
+            descr.diffuse = descr.color;
+        }
         this._squareList.push(new Square(descr));
     },
 
-    getFrog: function() {
+    getFrog: function () {
         return this._frogList[0];
     },
 

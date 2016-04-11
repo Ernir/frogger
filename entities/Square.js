@@ -27,6 +27,10 @@ Square.prototype.update = function () {
     // A Square is static.
 };
 
+Square.prototype.deadly = false;
+Square.prototype.goal = false;
+Square.prototype.impassable = false;
+
 Square.prototype.render = function (baseMatrix) {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.squareVertex);
