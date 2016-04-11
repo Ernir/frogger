@@ -44,8 +44,9 @@ var g_keys = {
 };
 
 function applyKeys(du) {
+    var frog = entityManager.getFrog();
     if (eatKey(g_keys.forward)) {
-        // Move forward?
+        frog.jumpForward();
     }
 }
 

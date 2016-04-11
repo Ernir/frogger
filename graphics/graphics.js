@@ -118,7 +118,6 @@ function initBuffers() {
     var projectionMatrix = perspective(fovy, 1.0, near, far);
     gl.uniformMatrix4fv(g_locs.projectionMatrix, false, flatten(projectionMatrix));
 
-
     gl.uniform4fv(gl.getUniformLocation(g_program, "lightPosition"), flatten(g_light.position));
 
 
@@ -138,6 +137,5 @@ function reloadView() {
         vec3(frog.cx, frog.cy, frog.cz),
         vec3(0.0, 1.0, 0.0)
     );
-    baseMatrix = mult(rotateY(g_camera.spinY), baseMatrix);
     return baseMatrix;
 }
