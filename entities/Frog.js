@@ -20,7 +20,7 @@ Frog.prototype.cz = 0;
 
 Frog.prototype.velX = 0;
 Frog.prototype.velY = 0;
-Frog.prototype.velZ = 0.1;
+Frog.prototype.velZ = 0.01;
 
 Frog.prototype.yRotation = 0;
 Frog.prototype.yRotationStep = 0.04;

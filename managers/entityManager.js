@@ -19,8 +19,16 @@ var entityManager = {
 // "PRIVATE" METHODS
 
     _generateThings: function () {
-        this.createFrog();
-        this.createSquare();
+        this.createFrog({cx: 6});
+
+        for (var i = 0; i < g_grid.width; i++) {
+            this.createSquare({
+                cx: i,
+                cz: 0,
+                ambient: vec4(0.2, 0.2, 0.2, 0.2),
+                diffuse: vec4(0.4, 0.4, 0,2, 0.2)
+            })
+        }
     },
 
     _forEachOf: function (aCategory, fn) {
@@ -56,6 +64,10 @@ var entityManager = {
 
     createSquare: function (descr) {
         this._squareList.push(new Square(descr));
+    },
+
+    getFrog: function() {
+        return this._frogList[0];
     },
 
     update: function (du) {

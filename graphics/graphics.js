@@ -63,15 +63,15 @@ function initBuffers() {
 
     Square.prototype.vertices = [
         vec4(-0.5, 0, 0.5, 1),
-        vec4(-0.5, 0,-0.5, 1),
-        vec4( 0.5, 0, 0.5, 1),
-        vec4( 0.5, 0,-0.5, 1)
+        vec4(-0.5, 0, -0.5, 1),
+        vec4(0.5, 0, 0.5, 1),
+        vec4(0.5, 0, -0.5, 1)
     ];
     Square.prototype.normals = [
-        vec4( 0, 1, 0, 0),
-        vec4( 0, 1, 0, 0),
-        vec4( 0, 1, 0, 0),
-        vec4( 0, 1, 0, 0)
+        vec4(0, 1, 0, 0),
+        vec4(0, 1, 0, 0),
+        vec4(0, 1, 0, 0),
+        vec4(0, 1, 0, 0)
     ];
 
     gl.useProgram(g_program);
@@ -126,8 +126,16 @@ function initBuffers() {
 function reloadView() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    var baseMatrix = lookAt(vec3(0.0, 5.0, g_camera.zView), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
-    baseMatrix = mult(baseMatrix, rotateX(g_camera.spinX));
-    baseMatrix = mult(baseMatrix, rotateY(g_camera.spinY));
+    var frog = entityManager.getFrog();
+    if (!frog) {
+        frog = {cx: 0, cy: 0, cz: 0};
+    }
+
+    var baseMatrix = lookAt(
+        vec3(frog.cx, frog.cy + 5.0, frog.cz + g_camera.zView),
+        vec3(frog.cx, frog.cy, frog.cz),
+        vec3(0.0, 1.0, 0.0)
+    );
+    baseMatrix = mult(rotateY(g_camera.spinY), baseMatrix);
     return baseMatrix;
 }

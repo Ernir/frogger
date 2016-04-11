@@ -19,6 +19,10 @@ Square.prototype.shininess = 50.0;
 Square.prototype.vertices = [];
 Square.prototype.normals = [];
 
+Square.prototype.cx = 0;
+Square.prototype.cy = 0;
+Square.prototype.cz = 0;
+
 Square.prototype.update = function () {
     // A Square is static.
 };
@@ -30,6 +34,7 @@ Square.prototype.render = function (baseMatrix) {
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.squareNormal);
     gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
 
+    baseMatrix = mult(baseMatrix, translate(this.cx, -0.25, this.cz));
     var modelViewMatrix = baseMatrix;
     var normalMatrix = util.normalsFromMV(modelViewMatrix);
 
