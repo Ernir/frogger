@@ -26,7 +26,13 @@ var g_camera = {
 var gl;
 var g_program;
 
-var g_buffers = {};
+var g_buffers = {
+    frogNormal: undefined,
+    squareNormal: undefined,
+    frogVertex: undefined,
+    squareVertex: undefined
+};
+
 var g_locs = {};
 
 function configureWebGL() {

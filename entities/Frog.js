@@ -20,7 +20,7 @@ Frog.prototype.cz = 0;
 
 Frog.prototype.velX = 0;
 Frog.prototype.velY = 0;
-Frog.prototype.velZ = 0;
+Frog.prototype.velZ = 0.1;
 
 Frog.prototype.yRotation = 0;
 Frog.prototype.yRotationStep = 0.04;
@@ -48,6 +48,7 @@ Frog.prototype.update = function (du) {
     if (this._isDeadNow) {
         return entityManager.KILL_ME_NOW;
     }
+    this.move(du);
 
     spatialManager.register(this);
 
@@ -68,6 +69,8 @@ Frog.prototype.render = function (baseMatrix) {
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.frogNormal);
     gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
 
+    baseMatrix = mult(baseMatrix, translate(this.cx, this.cy, this.cz));
+    baseMatrix = mult(baseMatrix, scalem(0.25, 0.25, 0.25))
     var modelViewMatrix = baseMatrix;
     var normalMatrix = util.normalsFromMV(modelViewMatrix);
 
