@@ -38,8 +38,8 @@ function keyCode(keyChar) {
 
 var g_keys = {
     forward: keyCode("W"),
-    back: keyCode("A"),
-    left: keyCode("S"),
+    back: keyCode("S"),
+    left: keyCode("A"),
     right: keyCode("D")
 };
 
@@ -47,6 +47,15 @@ function applyKeys(du) {
     var frog = entityManager.getFrog();
     if (eatKey(g_keys.forward)) {
         frog.jumpForward();
+    }
+    if (eatKey(g_keys.back)) {
+        frog.jumpBack();
+    }
+    if (eatKey(g_keys.left)) {
+        frog.jumpLeft();
+    }
+    if (eatKey(g_keys.right)) {
+        frog.jumpRight();
     }
 }
 
