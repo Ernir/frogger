@@ -59,9 +59,13 @@ function initBuffers() {
 
     var PR = PlyReader();
     var frogData = PR.read("froggy.ply");
+    var carData = PR.read("car.ply");
 
     Frog.prototype.vertices = frogData.points;
     Frog.prototype.normals = frogData.normals;
+
+    Car.prototype.vertices = carData.points;
+    Car.prototype.normals = carData.normals;
 
     Square.prototype.vertices = [
         vec4(-0.5, 0, 0.5, 1),
@@ -78,7 +82,7 @@ function initBuffers() {
 
     gl.useProgram(g_program);
 
-    // Normals array attribute buffer
+    // Normals array attribute buffers
     g_buffers.frogNormal = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.frogNormal);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(Frog.prototype.normals), gl.STATIC_DRAW);
@@ -87,11 +91,15 @@ function initBuffers() {
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.squareNormal);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(Square.prototype.normals), gl.STATIC_DRAW);
 
+    g_buffers.carNormal = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.carNormal);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(Car.prototype.normals), gl.STATIC_DRAW);
+
     g_locs.vNormal = gl.getAttribLocation(g_program, "vNormal");
     gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(g_locs.vNormal);
 
-    // vertex array attribute buffer
+    // vertex array attribute buffers
     g_buffers.frogVertex = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.frogVertex);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(Frog.prototype.vertices), gl.STATIC_DRAW);
@@ -99,6 +107,10 @@ function initBuffers() {
     g_buffers.squareVertex = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.squareVertex);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(Square.prototype.vertices), gl.STATIC_DRAW);
+
+    g_buffers.carVertex = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.carVertex);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(Car.prototype.vertices), gl.STATIC_DRAW);
 
     g_locs.vPosition = gl.getAttribLocation(g_program, "vPosition");
     gl.vertexAttribPointer(g_locs.vPosition, 4, gl.FLOAT, false, 0, 0);

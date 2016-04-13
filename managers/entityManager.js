@@ -15,6 +15,7 @@ var entityManager = {
 
     _frogList: [],
     _squareList: [],
+    _carList: [],
 
 // "PRIVATE" METHODS
 
@@ -47,7 +48,9 @@ var entityManager = {
                 });
             }
         }
-        this.createRow(12, g_colors.green)
+        this.createRow(12, g_colors.green);
+
+        this.createCar({cx: 5, yRotation: 90}); // ToDo generate these during play
     },
 
     _forEachOf: function (aCategory, fn) {
@@ -69,7 +72,8 @@ var entityManager = {
     deferredSetup: function () {
         this._categories = [
             this._frogList,
-            this._squareList
+            this._squareList,
+            this._carList
         ];
     },
 
@@ -102,6 +106,14 @@ var entityManager = {
             descr.diffuse = descr.color;
         }
         this._squareList.push(new Square(descr));
+    },
+
+    createCar: function (descr) {
+        if (descr.color) {
+            descr.ambient = descr.color;
+            descr.diffuse = descr.color;
+        }
+        this._carList.push(new Car(descr));
     },
 
     getFrog: function () {
