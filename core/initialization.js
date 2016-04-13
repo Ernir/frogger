@@ -13,7 +13,7 @@ function init() {
     initCanvasListeners();
     configureWebGL();
     entityManager.init();
-    g_elements.status.innerHTML = "Get to the bays on the other side!";
+    g_elements.status.innerHTML = "Get to the bays on the other side! Navigate with WASD.";
 
     function initGlobals() {
         g_elements = {};

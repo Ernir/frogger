@@ -38,13 +38,13 @@ Frog.prototype.diffuse = vec4(0.0, 0.8, 0.0, 1.0);
 Frog.prototype.specular = vec4(0.2, 0.2, 0.2, 1.0);
 Frog.prototype.shininess = 50.0;
 
-Frog.prototype.getRadius = function () {
-    return 0.25;
-};
-
 /*
  METHODS
  */
+
+Frog.prototype.getRadius = function () {
+    return 0.25;
+};
 
 Frog.prototype.update = function (du) {
 
@@ -85,45 +85,61 @@ Frog.prototype.handleCollisions = function () {
 };
 
 Frog.prototype.jumpForward = function () {
+    this.forceSnap();
     this.yRotation = 0;
-    if (this.gridZ < this.gridHeight && !this.isMoving()) {
+    if (this.gridZ < this.gridHeight && !this.isJumping()) {
         this.velZ = this.baseSpeed;
         this.targetZ = this.gridZ + 1;
     }
 };
 
 Frog.prototype.jumpBack = function () {
+    this.forceSnap();
     this.yRotation = 180;
-    if (this.gridZ > 0 && !this.isMoving()) {
+    if (this.gridZ > 0 && !this.isJumping()) {
         this.velZ = -this.baseSpeed;
         this.targetZ = this.gridZ - 1;
     }
 };
 
 Frog.prototype.jumpRight = function () {
+    this.forceSnap();
     this.yRotation = 90;
-    if (this.gridX > 0 && !this.isMoving()) {
+    if (this.gridX > 0 && !this.isJumping()) {
         this.velX = -this.baseSpeed;
         this.targetX = this.gridX - 1;
     }
 };
 
 Frog.prototype.jumpLeft = function () {
+    this.forceSnap();
     this.yRotation = 270;
-    if (this.gridX < this.gridWidth && !this.isMoving()) {
+    if (this.gridX < this.gridWidth && !this.isJumping()) {
         this.velX = this.baseSpeed;
         this.targetX = this.gridX + 1;
     }
 };
 
+Frog.prototype.forceSnap = function () {
+    if (this.isJumping()) {
+        return;
+    }
+    this.cx = Math.round(this.cx);
+    this.cz = Math.round(this.cz);
+    this.gridX = this.cx;
+    this.gridZ = this.cz;
+    this.targetX = this.gridX;
+    this.targetZ = this.gridZ;
+};
+
 Frog.prototype.snapToGrid = function () {
-    if (this.isMoving() && !this.isLocked()) {
+    if (this.isJumping() && !this.isLocked()) {
 
         var distanceToTarget = util.distSq2D(
             this.cx, this.cz,
             this.targetX, this.targetZ
         );
-        var tolerance = 0.05;
+        var tolerance = 0.02;
         if (distanceToTarget < tolerance || distanceToTarget > 1 + tolerance) {
             this.velX = 0;
             this.velZ = 0;
@@ -149,15 +165,17 @@ Frog.prototype.move = function (du) {
 
 Frog.prototype.verticalDisplacement = function () {
     // Simplified distance checking due to simple movement
-    var distanceFromTarget = Math.abs(
-        this.targetX - this.cx + this.targetZ - this.cz
-    );
-    return Math.sin(distanceFromTarget * Math.PI) / 3;
+    if (this.isJumping()) {
+        var distanceFromTarget = Math.abs(
+            this.targetX - this.cx + this.targetZ - this.cz
+        );
+        return Math.sin(distanceFromTarget * Math.PI) / 3;
+    }
+    return 0;
 };
 
-Frog.prototype.isMoving = function () {
-    return !(this.velX == 0 && this.velZ == 0);
-    // The frog doesn't move vertically
+Frog.prototype.isJumping = function () {
+    return this.targetX !== this.gridX || this.targetZ !== this.gridZ;
 };
 
 Frog.prototype.render = function (baseMatrix) {

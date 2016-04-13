@@ -144,6 +144,10 @@ var entityManager = {
         }
     },
 
+    maybeGenerateLogs: function (du) {
+        //ToDo generate some while playing
+    },
+
     update: function (du) {
 
         for (var c = 0; c < this._categories.length; ++c) {
@@ -166,6 +170,7 @@ var entityManager = {
             }
         }
         this.maybeGenerateCars(du);
+        this.maybeGenerateLogs(du);
     },
 
     render: function () {
