@@ -27,8 +27,8 @@ var entityManager = {
             this.createRow(i, g_colors.grayDark);
         }
         this.createRow(6, g_colors.gray);
-        for (var j = 7; i < 11; i++) {
-            this.createRow(i, g_colors.blue, true);
+        for (var j = 7; j < 11; j++) {
+            this.createRow(j, g_colors.blue, true);
         }
         for (var k = 0; k < 13; k++) {
             if (k % 2 === 0) {

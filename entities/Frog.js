@@ -38,7 +38,7 @@ Frog.prototype.specular = vec4(0.2, 0.2, 0.2, 1.0);
 Frog.prototype.shininess = 50.0;
 
 Frog.prototype.getRadius = function () {
-    return 0.5;
+    return 0.25;
 };
 
 /*
@@ -52,11 +52,26 @@ Frog.prototype.update = function (du) {
     if (this._isDeadNow) {
         return entityManager.KILL_ME_NOW;
     }
+    this.checkIfDead();
     this.move(du);
     this.snapToGrid();
 
     spatialManager.register(this);
 
+};
+
+Frog.prototype.checkIfDead = function () {
+    var entities = spatialManager.findEntitiesInRange(this.cx, this.cy, this.cz, this.getRadius());
+    var deathInRange = false;
+    for (var i = 0; i < entities.length; i++) {
+        var entity = entities[i];
+        if (entity.deadly) {
+            deathInRange = true;
+        }
+    }
+    if (this.isLocked() && deathInRange) {
+        main.gameOver();
+    }
 };
 
 Frog.prototype.jumpForward = function () {
@@ -92,23 +107,25 @@ Frog.prototype.jumpLeft = function () {
 };
 
 Frog.prototype.snapToGrid = function () {
-    if (this.isMoving()) {
-        // Make it stop if close enough to the target square
-        if (this.targetX !== this.gridX || this.targetZ !== this.gridZ) {
-            var distanceToTarget = util.distSq2D(
-                this.cx, this.cz,
-                this.targetX, this.targetZ
-            );
-            if (distanceToTarget < 0.1 || distanceToTarget > 1.1) {
-                this.velX = 0;
-                this.velZ = 0;
-                this.cx = this.targetX;
-                this.cz = this.targetZ;
-                this.gridX = this.targetX;
-                this.gridZ = this.targetZ;
-            }
+    if (this.isMoving() && !this.isLocked()) {
+
+        var distanceToTarget = util.distSq2D(
+            this.cx, this.cz,
+            this.targetX, this.targetZ
+        );
+        if (distanceToTarget < 0.1 || distanceToTarget > 1.1) {
+            this.velX = 0;
+            this.velZ = 0;
+            this.cx = this.targetX;
+            this.cz = this.targetZ;
+            this.gridX = this.targetX;
+            this.gridZ = this.targetZ;
         }
     }
+};
+
+Frog.prototype.isLocked = function () {
+    return this.targetX === this.gridX && this.targetZ === this.gridZ;
 };
 
 Frog.prototype.move = function (du) {
@@ -121,7 +138,7 @@ Frog.prototype.move = function (du) {
 Frog.prototype.isMoving = function () {
     return !(this.velX == 0 && this.velZ == 0);
     // The frog doesn't move vertically
-}
+};
 
 Frog.prototype.render = function (baseMatrix) {
 

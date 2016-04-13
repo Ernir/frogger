@@ -1,15 +1,15 @@
 /*
- A pseudo-entity to display the butterflies' arena.
+ A portion of the game grid. Can be deadly or not.
  */
 
 "use strict";
 
 // A generic contructor which accepts an arbitrary descriptor object
 function Square(descr) {
-    for (var property in descr) {
-        this[property] = descr[property];
-    }
+    this.setup(descr);
 }
+
+Square.prototype = new Entity();
 
 Square.prototype.ambient = vec4(0.2, 0.0, 0.0, 1.0);
 Square.prototype.diffuse = vec4(0.8, 0.0, 0.0, 1.0);
@@ -23,8 +23,13 @@ Square.prototype.cx = 0;
 Square.prototype.cy = 0;
 Square.prototype.cz = 0;
 
+Square.prototype.getRadius = function () {
+    return 0.25;
+};
+
 Square.prototype.update = function () {
-    // A Square is static.
+    spatialManager.unregister(this);
+    spatialManager.register(this);
 };
 
 Square.prototype.deadly = false;
@@ -38,7 +43,7 @@ Square.prototype.render = function (baseMatrix) {
     gl.bindBuffer(gl.ARRAY_BUFFER, g_buffers.squareNormal);
     gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
 
-    baseMatrix = mult(baseMatrix, translate(this.cx, -0.25, this.cz));
+    baseMatrix = mult(baseMatrix, translate(this.cx, this.cy, this.cz));
     var modelViewMatrix = baseMatrix;
     var normalMatrix = util.normalsFromMV(modelViewMatrix);
 
