@@ -74,6 +74,11 @@ Frog.prototype.handleCollisions = function () {
             deathInRange = true;
         } else if (entity.goal) {
             goalInRange = true;
+        } else if (entity.impassable) { // Dirty special case for the ends
+            this.velZ = 0;
+            this.cz = 10;
+            this.targetZ = 10;
+            this.forceSnap();
         } else if (entity.floater) {
             log = entity;
             if (!this.isJumping()) {
