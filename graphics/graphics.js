@@ -58,8 +58,8 @@ var g_light = {
 function initBuffers() {
 
     var PR = PlyReader();
-    var frogData = PR.read("froggy.ply");
-    var carData = PR.read("car.ply");
+    var frogData = PR.read("data/froggy.ply");
+    var carData = PR.read("data/car.ply");
 
     Frog.prototype.vertices = frogData.points;
     Frog.prototype.normals = frogData.normals;

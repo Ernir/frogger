@@ -88,7 +88,7 @@ function init() {
 
         g_logLanes = {
             first: {
-                velocity: 0.05,
+                velocity: 0.04,
                 spawnPos: 0,
                 timeToSpawn: 0,
                 minTTS: 100, // mininum time to series
@@ -98,7 +98,7 @@ function init() {
                 laneNum: 7
             },
             second: {
-                velocity: -0.05,
+                velocity: -0.06,
                 spawnPos: 12,
                 timeToSpawn: 100,
                 minTTS: 100, // mininum time to series
@@ -108,7 +108,7 @@ function init() {
                 laneNum: 8
             },
             third: {
-                velocity: 0.05,
+                velocity: 0.07,
                 spawnPos: 0,
                 timeToSpawn: 150,
                 minTTS: 100, // mininum time to series
@@ -118,7 +118,7 @@ function init() {
                 laneNum: 9
             },
             fourth: {
-                velocity: -0.05,
+                velocity: -0.06,
                 spawnPos: 12,
                 timeToSpawn: 200,
                 minTTS: 100, // mininum time to series
