@@ -16,6 +16,7 @@ var entityManager = {
     _frogList: [],
     _squareList: [],
     _carList: [],
+    _logList: [],
 
 // "PRIVATE" METHODS
 
@@ -49,6 +50,11 @@ var entityManager = {
             }
         }
         this.createRow(12, g_colors.green);
+        this.createLog({cx: 6, cz: 7, velX: 0});
+        this.createLog({cx: 6, cz: 8, velX: 0});
+        this.createLog({cx: 6, cz: 9, velX: 0});
+        this.createLog({cx: 6, cz: 10, velX: 0});
+        this.createLog({cx: 7, cz: 10, velX: 0});
     },
 
     _forEachOf: function (aCategory, fn) {
@@ -71,7 +77,8 @@ var entityManager = {
         this._categories = [
             this._frogList,
             this._squareList,
-            this._carList
+            this._carList,
+            this._logList
         ];
     },
 
@@ -81,6 +88,10 @@ var entityManager = {
 
     createFrog: function (descr) {
         this._frogList.push(new Frog(descr));
+    },
+
+    createLog: function (descr) {
+        this._logList.push(new Log(descr));
     },
 
     createRow: function (rowNumber, color, deadly) {

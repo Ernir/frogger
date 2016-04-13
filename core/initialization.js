@@ -6,6 +6,7 @@
 
 var g_elements;
 var g_carLanes;
+var g_logLanes;
 
 function init() {
 
@@ -84,6 +85,8 @@ function init() {
                 ambient: vec4(0.5, 0.5, 0.5, 1.0)
             }
         };
+
+        g_logLanes = {};
 
         gl = WebGLUtils.setupWebGL(g_elements.canvas);
         if (!gl) {

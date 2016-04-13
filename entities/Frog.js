@@ -67,16 +67,22 @@ Frog.prototype.handleCollisions = function () {
     );
     var deathInRange = false;
     var goalInRange = false;
+    var log;
     for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
         if (entity.deadly) {
             deathInRange = true;
         } else if (entity.goal) {
             goalInRange = true;
+        } else if (entity.floater) {
+            log = entity;
+            if (!this.isJumping()) {
+                this.velX = log.velX;
+            }
         }
     }
     if (this.isLocked()) {
-        if (deathInRange) {
+        if (deathInRange && !log) {
             main.gameOver();
         } else if (goalInRange) {
             main.gameOver(true);
@@ -160,6 +166,8 @@ Frog.prototype.move = function (du) {
 
     this.cx += this.velX * du;
     this.cz += this.velZ * du;
+
+    this.cx = Math.max(0, Math.min(this.cx, this.gridWidth));
 
 };
 

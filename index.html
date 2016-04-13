@@ -25,6 +25,8 @@ void main()
     gl_Position = projectionMatrix * modelViewMatrix * vPosition;
 
 }
+
+
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
@@ -57,11 +59,16 @@ void main()
 
     gl_FragColor = fColor;
 }
+
+
 </script>
 
-<script type="text/javascript" src="https://notendur.hi.is/~eth31/tgr/Common/MV.js"></script>
-<script type="text/javascript" src="https://notendur.hi.is/~eth31/tgr/Common/initShaders.js"></script>
-<script type="text/javascript" src="https://notendur.hi.is/~eth31/tgr/Common/webgl-utils.js"></script>
+<script type="text/javascript"
+        src="https://notendur.hi.is/~eth31/tgr/Common/MV.js"></script>
+<script type="text/javascript"
+        src="https://notendur.hi.is/~eth31/tgr/Common/initShaders.js"></script>
+<script type="text/javascript"
+        src="https://notendur.hi.is/~eth31/tgr/Common/webgl-utils.js"></script>
 
 <script type="text/javascript" src="core/initialization.js"></script>
 <script type="text/javascript" src="core/keys.js"></script>
@@ -77,6 +84,7 @@ void main()
 <script type="text/javascript" src="entities/Frog.js"></script>
 <script type="text/javascript" src="entities/Car.js"></script>
 <script type="text/javascript" src="entities/Square.js"></script>
+<script type="text/javascript" src="entities/Log.js"></script>
 
 <script type="text/javascript" src="managers/entityManager.js"></script>
 <script type="text/javascript" src="managers/spatialManager.js"></script>
@@ -85,11 +93,12 @@ void main()
 
 <link type="text/css" rel="stylesheet" href="style.css">
 <body>
- <h1 id="title">FrogGL</h1>
- <p id="status">Loading...</p>
- <canvas id="gl-canvas" width="600" height="600">
-        Oops ... your browser doesn't support the HTML5 canvas element</canvas>
- <div id="frametime-debug"></div>
- <div id="frametime-delta-debug"></div>
+<h1 id="title">FrogGL</h1>
+<p id="status">Loading...</p>
+<canvas id="gl-canvas" width="600" height="600">
+    Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<div id="frametime-debug"></div>
+<div id="frametime-delta-debug"></div>
 </body>
 </html>
