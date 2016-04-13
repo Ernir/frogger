@@ -9,6 +9,11 @@ function Car(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
+    if (this.velX > 0) {
+        this.yRotation = 90;
+    } else {
+        this.yRotation = 270;
+    }
 }
 
 Car.prototype = new Entity();
@@ -28,7 +33,7 @@ Car.prototype.normals = [];
 
 Car.prototype.ambient = vec4(0.0, 0.0, 0.2, 1.0);
 Car.prototype.diffuse = vec4(0.0, 0.0, 0.6, 1.0);
-Car.prototype.specular = vec4(0.4, 0.4, 0.4, 1.0);
+Car.prototype.specular = vec4(1.0, 1.0, 1.0, 1.0);
 Car.prototype.shininess = 75.0;
 
 Car.prototype.deadly = true;
@@ -43,6 +48,14 @@ Car.prototype.getRadius = function () {
 
 Car.prototype.update = function (du) {
     spatialManager.unregister(this);
+
+    if (this._isDeadNow) {
+        return entityManager.KILL_ME_NOW;
+    }
+
+    if (this.cx < 0 || this.cx > 13) {
+        this.kill();
+    }
     this.move(du);
     spatialManager.register(this);
 };
@@ -62,7 +75,7 @@ Car.prototype.render = function (baseMatrix) {
     gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
 
 
-    baseMatrix = mult(baseMatrix, translate(this.cx, this.cy+0.25, this.cz));
+    baseMatrix = mult(baseMatrix, translate(this.cx, this.cy + 0.25, this.cz));
     baseMatrix = mult(baseMatrix, scalem(0.2, 0.2, 0.2));
     baseMatrix = mult(baseMatrix, rotateY(this.yRotation));
     var modelViewMatrix = baseMatrix;

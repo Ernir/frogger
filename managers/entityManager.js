@@ -49,8 +49,6 @@ var entityManager = {
             }
         }
         this.createRow(12, g_colors.green);
-
-        this.createCar({cx: 5, yRotation: 90}); // ToDo generate these during play
     },
 
     _forEachOf: function (aCategory, fn) {
@@ -118,6 +116,32 @@ var entityManager = {
 
     getFrog: function () {
         return this._frogList[0];
+    }
+    ,
+    maybeGenerateCars: function (du) {
+        for (var laneNum in g_carLanes) {
+            if (g_carLanes.hasOwnProperty(laneNum)) {
+                var lane = g_carLanes[laneNum];
+                lane.timeToSpawn -= du;
+                if (lane.timeToSpawn <= 0) {
+                    this.createCar({
+                        cx: lane.spawnPos,
+                        cz: lane.laneNum,
+                        velX: lane.velocity,
+                        ambient: lane.ambient,
+                        diffuse: lane.diffuse
+
+                    });
+                    lane.spawnedInSeries += 1;
+                    if (lane.spawnedInSeries <= lane.seriesLength) {
+                        lane.timeToSpawn = 25;
+                    } else {
+                        lane.spawnedInSeries = 0;
+                        lane.timeToSpawn = util.randRange(lane.minTTS, lane.maxTTS);
+                    }
+                }
+            }
+        }
     },
 
     update: function (du) {
@@ -141,6 +165,7 @@ var entityManager = {
                 }
             }
         }
+        this.maybeGenerateCars(du);
     },
 
     render: function () {
