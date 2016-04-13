@@ -44,11 +44,6 @@ main._isGameOver = false;
 
 main.gameOver = function (victory) {
     this._isGameOver = true;
-    if (victory) {
-        g_elements.status.innerHTML = "You win! Reload to play again."
-    } else {
-        g_elements.status.innerHTML = "You lose! Reload to play again."
-    }
     console.log("gameOver: quitting...");
 };
 

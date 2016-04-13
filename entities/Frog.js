@@ -88,9 +88,13 @@ Frog.prototype.handleCollisions = function () {
     }
     if (this.isLocked()) {
         if (deathInRange && !log) {
-            main.gameOver();
+            g_score--;
+            g_elements.score.innerHTML = g_score;
+            this.reset();
         } else if (goalInRange) {
-            main.gameOver(true);
+            g_score++;
+            g_elements.score.innerHTML = g_score;
+            this.reset();
         }
     }
 };
@@ -190,6 +194,16 @@ Frog.prototype.verticalDisplacement = function () {
 
 Frog.prototype.isJumping = function () {
     return this.targetX !== this.gridX || this.targetZ !== this.gridZ;
+};
+
+Frog.prototype.reset = function () {
+    this.targetX = 6;
+    this.targetZ = 0;
+    this.gridX = 6;
+    this.gridZ = 0;
+    this.cx = 6;
+    this.cz = 0;
+    this.forceSnap();
 };
 
 Frog.prototype.render = function (baseMatrix) {

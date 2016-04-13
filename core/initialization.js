@@ -7,6 +7,7 @@
 var g_elements;
 var g_carLanes;
 var g_logLanes;
+var g_score = 0;
 
 function init() {
 
@@ -14,14 +15,14 @@ function init() {
     initCanvasListeners();
     configureWebGL();
     entityManager.init();
-    g_elements.status.innerHTML = "Get to the bays on the other side! Navigate with WASD.";
+    g_elements.score.innerHTML = g_score;
 
     function initGlobals() {
         g_elements = {};
         g_elements.canvas = document.getElementById("gl-canvas");
         g_elements.frametimeDebug = document.getElementById("frametime-debug");
         g_elements.frametimeDeltaDebug = document.getElementById("frametime-delta-debug");
-        g_elements.status = document.getElementById("status");
+        g_elements.score = document.getElementById("score");
 
         g_carLanes = {
             first: {
