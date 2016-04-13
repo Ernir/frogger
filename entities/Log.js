@@ -1,4 +1,3 @@
-
 function Log(descr) {
     this.setup(descr);
 }
@@ -13,11 +12,17 @@ Log.prototype.velX = 0.1;
 
 Log.prototype.update = function (du) {
     spatialManager.unregister(this);
+    if (this._isDeadNow) {
+        return entityManager.KILL_ME_NOW;
+    }
+    if (this.cx < 0 || this.cx > 12) {
+        this.kill();
+    }
     this.move(du);
     spatialManager.register(this);
 };
 
-Log.prototype.move = function(du) {
+Log.prototype.move = function (du) {
     this.cx += this.velX;
 };
 

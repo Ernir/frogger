@@ -130,6 +130,7 @@ Frog.prototype.forceSnap = function () {
     if (this.isJumping()) {
         return;
     }
+    this.velX = 0;
     this.cx = Math.round(this.cx);
     this.cz = Math.round(this.cz);
     this.gridX = this.cx;

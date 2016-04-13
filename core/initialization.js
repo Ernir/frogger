@@ -86,7 +86,48 @@ function init() {
             }
         };
 
-        g_logLanes = {};
+        g_logLanes = {
+            first: {
+                velocity: 0.05,
+                spawnPos: 0,
+                timeToSpawn: 0,
+                minTTS: 100, // mininum time to series
+                maxTTS: 300, // maximum time to series
+                spawnedInSeries: 0,
+                seriesLength: 10,
+                laneNum: 7
+            },
+            second: {
+                velocity: -0.05,
+                spawnPos: 12,
+                timeToSpawn: 100,
+                minTTS: 100, // mininum time to series
+                maxTTS: 300, // maximum time to series
+                spawnedInSeries: 0,
+                seriesLength: 20,
+                laneNum: 8
+            },
+            third: {
+                velocity: 0.05,
+                spawnPos: 0,
+                timeToSpawn: 150,
+                minTTS: 100, // mininum time to series
+                maxTTS: 300, // maximum time to series
+                spawnedInSeries: 0,
+                seriesLength: 10,
+                laneNum: 9
+            },
+            fourth: {
+                velocity: -0.05,
+                spawnPos: 12,
+                timeToSpawn: 200,
+                minTTS: 100, // mininum time to series
+                maxTTS: 300, // maximum time to series
+                spawnedInSeries: 0,
+                seriesLength: 15,
+                laneNum: 10
+            }
+        };
 
         gl = WebGLUtils.setupWebGL(g_elements.canvas);
         if (!gl) {

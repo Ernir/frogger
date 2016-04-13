@@ -50,11 +50,6 @@ var entityManager = {
             }
         }
         this.createRow(12, g_colors.green);
-        this.createLog({cx: 6, cz: 7, velX: 0});
-        this.createLog({cx: 6, cz: 8, velX: 0});
-        this.createLog({cx: 6, cz: 9, velX: 0});
-        this.createLog({cx: 6, cz: 10, velX: 0});
-        this.createLog({cx: 7, cz: 10, velX: 0});
     },
 
     _forEachOf: function (aCategory, fn) {
@@ -156,7 +151,26 @@ var entityManager = {
     },
 
     maybeGenerateLogs: function (du) {
-        //ToDo generate some while playing
+        for (var laneNum in g_logLanes) {
+            if (g_logLanes.hasOwnProperty(laneNum)) {
+                var lane = g_logLanes[laneNum];
+                lane.timeToSpawn -= du;
+                if (lane.timeToSpawn <= 0) {
+                    this.createLog({
+                        cx: lane.spawnPos,
+                        cz: lane.laneNum,
+                        velX: lane.velocity
+                    });
+                    lane.spawnedInSeries += 1;
+                    if (lane.spawnedInSeries <= lane.seriesLength) {
+                        lane.timeToSpawn = 10;
+                    } else {
+                        lane.spawnedInSeries = 0;
+                        lane.timeToSpawn = util.randRange(lane.minTTS, lane.maxTTS);
+                    }
+                }
+            }
+        }
     },
 
     update: function (du) {
