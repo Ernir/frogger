@@ -53,7 +53,7 @@ Frog.prototype.update = function (du) {
     if (this._isDeadNow) {
         return entityManager.KILL_ME_NOW;
     }
-    this.checkIfDead();
+    this.handleCollisions();
     this.move(du);
     this.snapToGrid();
 
@@ -61,17 +61,26 @@ Frog.prototype.update = function (du) {
 
 };
 
-Frog.prototype.checkIfDead = function () {
-    var entities = spatialManager.findEntitiesInRange(this.cx, this.cy, this.cz, this.getRadius());
+Frog.prototype.handleCollisions = function () {
+    var entities = spatialManager.findEntitiesInRange(
+        this.cx, this.cy, this.cz, this.getRadius()
+    );
     var deathInRange = false;
+    var goalInRange = false;
     for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
         if (entity.deadly) {
             deathInRange = true;
+        } else if (entity.goal) {
+            goalInRange = true;
         }
     }
-    if (this.isLocked() && deathInRange) {
-        main.gameOver();
+    if (this.isLocked()) {
+        if (deathInRange) {
+            main.gameOver();
+        } else if (goalInRange) {
+            main.gameOver(true);
+        }
     }
 };
 
@@ -115,13 +124,14 @@ Frog.prototype.snapToGrid = function () {
             this.targetX, this.targetZ
         );
         var tolerance = 0.05;
-        if (distanceToTarget < tolerance || distanceToTarget > 1+tolerance) {
+        if (distanceToTarget < tolerance || distanceToTarget > 1 + tolerance) {
             this.velX = 0;
             this.velZ = 0;
             this.cx = this.targetX;
             this.cz = this.targetZ;
             this.gridX = this.targetX;
             this.gridZ = this.targetZ;
+            this.handleCollisions(); // This jerky movement requires re-checking
         }
     }
 };
@@ -142,7 +152,7 @@ Frog.prototype.verticalDisplacement = function () {
     var distanceFromTarget = Math.abs(
         this.targetX - this.cx + this.targetZ - this.cz
     );
-    return Math.sin(distanceFromTarget*Math.PI)/3;
+    return Math.sin(distanceFromTarget * Math.PI) / 3;
 };
 
 Frog.prototype.isMoving = function () {
