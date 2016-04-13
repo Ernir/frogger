@@ -28,6 +28,7 @@ Frog.prototype.gridHeight = 12;
 Frog.prototype.velX = 0;
 Frog.prototype.velY = 0;
 Frog.prototype.velZ = 0;
+Frog.prototype.baseSpeed = 0.05;
 
 Frog.prototype.vertices = [];
 Frog.prototype.normals = [];
@@ -77,7 +78,7 @@ Frog.prototype.checkIfDead = function () {
 Frog.prototype.jumpForward = function () {
     this.yRotation = 0;
     if (this.gridZ < this.gridHeight && !this.isMoving()) {
-        this.velZ = 0.1;
+        this.velZ = this.baseSpeed;
         this.targetZ = this.gridZ + 1;
     }
 };
@@ -85,7 +86,7 @@ Frog.prototype.jumpForward = function () {
 Frog.prototype.jumpBack = function () {
     this.yRotation = 180;
     if (this.gridZ > 0 && !this.isMoving()) {
-        this.velZ = -0.1;
+        this.velZ = -this.baseSpeed;
         this.targetZ = this.gridZ - 1;
     }
 };
@@ -93,7 +94,7 @@ Frog.prototype.jumpBack = function () {
 Frog.prototype.jumpRight = function () {
     this.yRotation = 90;
     if (this.gridX > 0 && !this.isMoving()) {
-        this.velX = -0.1;
+        this.velX = -this.baseSpeed;
         this.targetX = this.gridX - 1;
     }
 };
@@ -101,7 +102,7 @@ Frog.prototype.jumpRight = function () {
 Frog.prototype.jumpLeft = function () {
     this.yRotation = 270;
     if (this.gridX < this.gridWidth && !this.isMoving()) {
-        this.velX = 0.1;
+        this.velX = this.baseSpeed;
         this.targetX = this.gridX + 1;
     }
 };
@@ -113,7 +114,8 @@ Frog.prototype.snapToGrid = function () {
             this.cx, this.cz,
             this.targetX, this.targetZ
         );
-        if (distanceToTarget < 0.1 || distanceToTarget > 1.1) {
+        var tolerance = 0.05;
+        if (distanceToTarget < tolerance || distanceToTarget > 1+tolerance) {
             this.velX = 0;
             this.velZ = 0;
             this.cx = this.targetX;
@@ -135,6 +137,14 @@ Frog.prototype.move = function (du) {
 
 };
 
+Frog.prototype.verticalDisplacement = function () {
+    // Simplified distance checking due to simple movement
+    var distanceFromTarget = Math.abs(
+        this.targetX - this.cx + this.targetZ - this.cz
+    );
+    return Math.sin(distanceFromTarget*Math.PI)/3;
+};
+
 Frog.prototype.isMoving = function () {
     return !(this.velX == 0 && this.velZ == 0);
     // The frog doesn't move vertically
@@ -148,7 +158,7 @@ Frog.prototype.render = function (baseMatrix) {
     gl.vertexAttribPointer(g_locs.vNormal, 4, gl.FLOAT, false, 0, 0);
 
 
-    baseMatrix = mult(baseMatrix, translate(this.cx, this.cy, this.cz));
+    baseMatrix = mult(baseMatrix, translate(this.cx, this.cy + 0.25 + this.verticalDisplacement(), this.cz));
     baseMatrix = mult(baseMatrix, scalem(0.15, 0.15, 0.15));
     baseMatrix = mult(baseMatrix, rotateY(this.yRotation));
     var modelViewMatrix = baseMatrix;
